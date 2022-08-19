@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block body %}
+    <h1 class="heading">Blood bank Donor registration Form</h1><hr>
+    <form method="post">
+        {% csrf_token %}
+        <pre>
+        <table>{{ myform }}</table>
+                <input type="submit" class="btn-primary" value="Register"/>
+        </pre>
+    </form>
+
+{% endblock body %}

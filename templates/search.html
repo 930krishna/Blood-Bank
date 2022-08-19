@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1 class="heading">Search the Donor</h1><hr>
+<form method='post'>
+    {% csrf_token %}
+    <pre>
+        Select Blood Group : <select name='bg'>
+            <option value="">Select</option>
+            <option value="A+">A+ve</option>
+            <option value="A-">A-ve</option>
+            <option value="B+">B+ve</option>
+            <option value="B-">B-ve</option>
+            <option value="O+">O+ve</option>
+            <option value="O-">O-ve</option>
+            <option value="AB+">AB+ve</option>
+            <option value="AB-">AB-ve</option>
+        </select>
+        Select your City   : <input type='text' name='ct'/>
+                             <input type="submit" class="btn-outline-info" value="Search"/>
+    </pre>
+</form>
+    
+{% endblock body %}
+    

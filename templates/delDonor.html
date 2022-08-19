@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block body %}
+<form method='post'>
+    {% csrf_token %}
+    <pre>
+        <h3>Do u want to delete the record of {{ myform.dname }}
+                                                <input type="submit" class="btn btn-danger" value="Yes"/>
+    </pre>
+</form>
+{% endblock body %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="heading">List of Desired Donors</h1><hr>
+<table border="4" class="table table-info table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Donor Name</th>
+            <th>Address</th>
+            <th>Blood Group</th>
+            <th>Bloodbank Name</th>
+            <th>Contact Name</th>
+            <th>Bloodbank Contact</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dt in mydata %}
+        <tr>
+            <td>{{ dt.dname }}</td>
+            <td>{{ dt.address}}&nbsp;{{dt.city }}</td>
+            <td>{{ dt.bloodgroup }}</td>
+            <td>{{ dt.bloodbankid.bbname }}</td>
+            <td>{{ dt.bloodbankid.contactPerson }}</td>
+            <td>{{ dt.bloodbankid.contact }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock body %}

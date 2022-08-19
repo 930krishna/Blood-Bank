@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="heading">List of Bloodbanks</h1><hr>
+<table border="4" class="table table-info table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Bank Name</th>
+            <th>Address</th>
+            <th>Email ID</th>
+            <th>Contact</th>
+            <th>Contact Person</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dt in mydata %}
+        <tr>
+            <td>{{ dt.bbname }}</td>
+            <td>{{ dt.address}}&nbsp;{{dt.city }}</td>
+            <td>{{ dt.email }}</td>
+            <td>{{ dt.contact }}</td>
+            <td>{{ dt.contactPerson }}</td>
+            <td><a href="{% url 'updBank' id=dt.bloodbankid %}"><button class="btn btn-warning">Update</button></a></td>
+            <td><a href="{% url 'delBank' id=dt.bloodbankid %}"><button class="btn btn-danger">Delete</button></a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock body %}

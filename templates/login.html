@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1 class="heading">User Login Form</h1><hr>
+    <form method='post'>
+        {% csrf_token %}
+       <pre>
+        User Name : <input type="text" name="unm"/>
+        Password  : <input type="password" name="pass"/>
+                    <input type="submit" value="Login Now"/>
+       </pre>
+    </form>
+
+{% endblock body %}
+    

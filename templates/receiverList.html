@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="heading">List of Bloodbank Receivers</h1><hr>
+<table border="4" class="table table-info table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Receiver Name</th>
+            <th>Address</th>
+            <th>Contact</th>
+            <th>Bloodbank Name</th>
+            <th>Blood group</th>
+            <th>Amount Paid</th>
+            <th>Rcpt Date</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dt in mydata %}
+        <tr>
+            <td>{{ dt.rcname }}</td>
+            <td>{{ dt.address}}&nbsp;{{dt.city }}</td>
+            <td>{{ dt.contact }}</td>
+            <td>{{ dt.bloodbankid.bbname }}</td>
+            <td>{{ dt.bloodgroup }}</td>
+            <td>{{ dt.amount }}</td>
+            <td>{{ dt.request_dt }}</td>
+            <td><a href="{% url 'updReceiver' id=dt.receiverid %}"><button class="btn btn-warning">Update</button></a></td>
+            <td><a href="{% url 'delReceiver' id=dt.receiverid %}"><button class="btn btn-danger">Delete</button></a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock body %}

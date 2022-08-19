@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block body %}
+    <h1 class="heading">Blood bank registration Form</h1><hr>
+    <form method="post">
+        {% csrf_token %}
+        
+        {% comment %} BloodBank ID   : <input type="text" name="bid"/>
+        BloodBank Name : <input type="text" name="bnm"/> 
+        Address        : <input type="text" name="add"/>
+        City           : <input type="text" name="ct"/>
+        Contact Person : <input type="text" name="cp"/>
+        Contact Number : <input type="text" name="cn"/>
+        Email ID       : <input type="text" name="mail"/> {% endcomment %}
+        <table>{{ myform }}</table>
+       <pre>
+<b>Username</b>       <input type="text"  value="{{ username }}" readonly />
+               <input type="submit" class="btn-primary" value="Register"/>
+                        
+       </pre>            
+    </form> 
+            
+{% endblock body %}
