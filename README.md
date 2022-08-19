@@ -5,6 +5,7 @@ Setup Project in localhost using below steps:
 --------------------------------------------
 
 Step 1: Create emtpy mybank database in mysql.
+
 Step 2: Run below commands in terminal for create database tables in mysql:
 		python manage.py makemigrations
 		python manage.py migrate 
