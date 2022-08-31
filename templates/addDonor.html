@@ -3,9 +3,12 @@
     <h1 class="heading">Blood bank Donor registration Form</h1><hr>
     <form method="post">
         {% csrf_token %}
-        <pre>
+        
         <table>{{ myform }}</table>
-                <input type="submit" class="btn-primary" value="Register"/>
+        <pre>
+<b>Bloodbank</b>         <input type="text"  value="{{ bbnm.bbname }}" readonly />
+<b>Username</b>          <input type="text"  value="{{ username }}" readonly />
+                  <input type="submit" class="btn-primary" value="Register"/>
         </pre>
     </form>
 

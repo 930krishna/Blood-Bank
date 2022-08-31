@@ -8,11 +8,12 @@ class MyUser(models.Model):
     lastname=models.CharField(max_length=20)
     password=models.CharField(max_length=500)
     usertype=models.CharField(max_length=20, default='Guest')
+    created_by=models.CharField(max_length=20,default='admin')
     def __str__(self):
         return self.username
 
 class Bloodbank(models.Model):
-    bloodbankid=models.IntegerField(primary_key=True)
+    bloodbankid=models.AutoField(primary_key=True)
     bbname=models.CharField(max_length=50)
     address=models.CharField(max_length=30)
     city=models.CharField(max_length=10)
@@ -24,7 +25,7 @@ class Bloodbank(models.Model):
         return self.bbname+"-"+self.city
 
 class Donor(models.Model):
-    donorid=models.IntegerField(primary_key=True)
+    donorid=models.AutoField(primary_key=True)
     dname=models.CharField(max_length=50)
     address=models.CharField(max_length=30)
     city=models.CharField(max_length=10)
@@ -41,7 +42,7 @@ class Donor(models.Model):
         return self.dname+"-"+self.bloodgroup
 
 class Receiver(models.Model):
-    receiverid=models.IntegerField(primary_key=True)
+    receiverid=models.AutoField(primary_key=True)
     rcname=models.CharField(max_length=50)
     address=models.CharField(max_length=30)
     city=models.CharField(max_length=10)
@@ -61,8 +62,9 @@ class Receiver(models.Model):
         return self.rcname+"-"+self.bloodgroup+"-"+self.city
 
 class Complaint(models.Model):
+    comp_id=models.AutoField(primary_key=True)
     comp_no=models.IntegerField()
-    comp_name=models.CharField(max_length=20)
+    comp_name=models.CharField(max_length=255)
     comp_phone=models.CharField(max_length=10)
     comp_msg=models.CharField(max_length=500)
     status=models.CharField(max_length=20)

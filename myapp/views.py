@@ -4,10 +4,29 @@ from django.views import View
 from .models import *
 from .forms import *
 from django.contrib.auth import logout
+from django.core.paginator import Paginator
 
 
 def home(request):
     return render(request,'home.html')
+
+class UserList(View):
+    def get(self,request):
+        data=MyUser.objects.all()
+        mydata = UserList.common(data,request)
+        return render(request,'userList.html',{'mydata':mydata})
+    def post(self,request):
+        usertype=request.POST['usertype']
+        if usertype:
+            data=MyUser.objects.filter(usertype__exact=usertype) 
+        else:
+            data=MyUser.objects.all()
+        mydata = UserList.common(data,request)  
+        return render(request,'userList.html',{'mydata':mydata, 'usertype': usertype})
+    def common(data,request):
+        p = Paginator(data, 10)
+        page_number = request.GET.get('page')
+        return p.get_page(page_number)    
 
 class AddBloodBank(View):
     def get(self,request):
@@ -33,9 +52,23 @@ class AddBloodBank(View):
         else:
             return HttpResponse("<h5>Data could not be added...")          
  
-def bankList(request):
-    data=Bloodbank.objects.all()
-    return render(request,'bankList.html',{'mydata':data})
+class BankList(View):
+    def get(self,request):
+        data=Bloodbank.objects.all()
+        mydata = BankList.common(data,request)
+        return render(request,'bankList.html',{'mydata':mydata})
+    def post(self,request):
+        city=request.POST['city']
+        if city:
+            data=Bloodbank.objects.filter(city__exact=city) 
+        else:
+            data=Bloodbank.objects.all()
+        mydata = BankList.common(data,request)  
+        return render(request,'bankList.html',{'mydata':mydata, 'city': city})
+    def common(data,request):
+        p = Paginator(data, 10)
+        page_number = request.GET.get('page')
+        return p.get_page(page_number)
 
 class UpdateBank(View):
     def get(self,request,id):
@@ -47,26 +80,42 @@ class UpdateBank(View):
         myform=BloodbankForm(request.POST,instance=obj)
         if myform.is_valid():
             myform.save()
-            return redirect('bankList')
+            return redirect('home')
 
-class DeleteBank(View):
-    def get(self,request,id):
-        obj=get_object_or_404(Bloodbank,bloodbankid=id)
-        myform=BloodbankForm(instance=obj)
-        return render(request,'delBank.html',{'myform':myform})
-    def post(self,request,id):
-        obj=get_object_or_404(Bloodbank,bloodbankid=id)
-        obj.delete()
-        return redirect('bankList')        
-    
+def delBank(request, id):
+    obj=get_object_or_404(Bloodbank,bloodbankid=id)
+    obj.delete()
+    return redirect('bankList')
+
 class AddDonor(View):
     def get(self,request):
+        username=request.session['username']
+        creator=request.session['created_by']
+        bbnm=Bloodbank.objects.get(username=creator)
         myform=DonorForm()
-        return render(request,'addDonor.html',{'myform':myform})        
+        return render(request,'addDonor.html',{'myform':myform,'username':username,'bbnm':bbnm})        
     def post(self,request):
+        username=request.session['username']
+        creator=request.session['created_by']
+        bbnm=Bloodbank.objects.get(username=creator)
         myform=DonorForm(request.POST)
         if myform.is_valid():
-            myform.save()
+            donorid=myform.cleaned_data['donorid']
+            dname=myform.cleaned_data['dname']
+            address=myform.cleaned_data['address']
+            city=myform.cleaned_data['city']
+            contact=myform.cleaned_data['contact']
+            bloodgroup=myform.cleaned_data['bloodgroup']
+            qty=myform.cleaned_data['qty']
+            bloodbagno=myform.cleaned_data['bloodbagno']
+            bloodCollectiondt=myform.cleaned_data['bloodCollectiondt']
+            bloodExpirydt=myform.cleaned_data['bloodExpirydt']
+            bloodbankid=bbnm.bloodbankid
+            status=myform.cleaned_data['status']
+            username=username
+            p=Donor(donorid,dname,address,city,contact,bloodgroup,qty,bloodbagno,bloodCollectiondt,bloodExpirydt,bloodbankid,status,username)
+            p.save()
+            # myform.save()
             return redirect('home')
         else:
             return HttpResponse("<h5>Data could not be added...")
@@ -95,7 +144,8 @@ class DeleteDonor(View):
 
 def donorList(request):
     username=request.session['username']
-    data=Donor.objects.filter(username__iexact=username)
+    data=Bloodbank.objects.get(username_id=username)
+    data=Donor.objects.filter(bloodbankid=data.bloodbankid)
     return render(request,'donorList.html',{'mydata':data})
 
 class AddReceiver(View):
@@ -150,36 +200,52 @@ class SearchDonor(View):
             data=Donor.objects.filter(bloodgroup__iexact=bg).filter(city__iexact=ct)
         else:
             data=Donor.objects.all()
-        return render(request,'donordata.html',{'mydata':data})
-
-
-class LoginView(View):
-    def get(self,request):
-        return render(request,'login.html')
-    def post(self,request):
-        unm=request.POST['unm']
-        pwd=request.POST['pass']
-        userdata=MyUser.objects.filter(username__exact=unm).filter(password__exact=pwd)
-        if userdata:
-            for user in userdata:
-                request.session['utype']=user.usertype
-                request.session['uname']=user.firstname+" "+user.lastname
-                request.session['username']=user.username
-            return redirect('home')
-        else:
-            return HttpResponse("<h3>Invalid User Details....</h3>")
-        
+        return render(request,'donordata.html',{'mydata':data})        
 
 class Registration(View):
     def get(self,request):
+        creator=request.session['username']
         myform=UserForm()
-        return render(request,'register.html',{'myform':myform})
+        return render(request,'register.html',{'myform':myform,'creator':creator})
     def post(self,request):
         myform=UserForm(request.POST)
+        creator=request.session['username']
         if myform.is_valid():
-            myform.save()
-        return redirect('logins')
+            username=myform.cleaned_data['username']
+            firstname=myform.cleaned_data['firstname']
+            lastname=myform.cleaned_data['lastname']
+            password=myform.cleaned_data['password']
+            usertype=myform.cleaned_data['usertype']
+            created_by=creator
+            p=MyUser(username,firstname,lastname,password,usertype,created_by)
+            p.save()
+            # myform.save()
+        return redirect('bankList')
 
 def logouts(request):
         logout(request)
-        return redirect('home')
+        return redirect('/')
+
+class UpdateProfile(View):
+    def get(self,request):
+        username=request.session['username']
+        utype=request.session['utype']
+        if(utype=='bloodbank'):
+            data=Bloodbank.objects.get(username_id=username)
+            obj=get_object_or_404(Bloodbank,bloodbankid=data.bloodbankid)
+            myform=BloodbankForm(instance=obj)
+        elif(utype=='donor'):
+            data=Donor.objects.get(username_id=username)
+            obj=get_object_or_404(Donor,donorid=data.donorid)
+            myform=DonorForm(instance=obj)
+        elif(utype=='receiver'):
+            data=Receiver.objects.get(username_id=username)
+            obj=get_object_or_404(Receiver,receiverid=data.receiverid)
+            myform=ReceiverForm(instance=obj)
+        return render(request,'updProfile.html',{'myform':myform})
+    def post(self,request,id):
+        obj=get_object_or_404(Donor,donorid=id)
+        myform=DonorForm(request.POST,instance=obj)
+        if myform.is_valid():
+            myform.save()
+            return redirect('donorList')

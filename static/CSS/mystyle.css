@@ -1,0 +1,19 @@
+body {  
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    width: 100%; backdrop-filter: blur(2px);
+}
+.heading{
+    background-image:linear-gradient(to right, white,blue);
+    color:black;
+    font-size:40px;
+    text-decoration:underline;
+    text-align:center;
+    font-family:monotype corsiva;
+}
+.top-partition{
+    margin-top: 7px;
+    color: cadetblue;
+}

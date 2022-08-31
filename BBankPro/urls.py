@@ -16,9 +16,24 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from myapp.views import home
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # Guest Scope
+    path('',views.index),
+    path('home',views.index),  
+    path('bloodbanks',views.BloodBanks.as_view(),name='bloodbanks'),    
+    path('complaints',views.Complaints.as_view(),name='complaints'),
+    path('addcomplaint',views.AddComplaints.as_view(),name='addcomplaint'),
+    path('logins',views.LoginView.as_view(),name='logins'),
+
+    # User Scope        
     path('myapp/',include('myapp.urls')),
-   
+
+    # Rest API Scope
+    path('api/',include("restapi.urls")),
+
+    # Admin Scope
+    path('admin/', admin.site.urls),
+
 ]

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="heading">Add Complaint</h1><hr>
+<div class="container">
+    <div>
+    <form method="post">
+     {% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleInputText" class="form-label">Complaint Number</label>
+            <input type="text" placeholder="Enter Title" name="comp_no" value="{{ comp_no }}" class="form-control" >
+        </div>     
+        <div class="mb-3">
+            <label for="exampleInputText" class="form-label">Complaint Title</label>
+            <input type="text" placeholder="Enter Title" name="title" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputNumber" class="form-label">Contact</label>
+            <input type="text" placeholder="Enter Contact Number" name="contact" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="floatingTextarea" class="form-label">Message</label>
+            <textarea class="form-control" placeholder="Enter Message" name="message" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputText" class="form-label">Blood Bank</label>
+            <select class="form-select" name='username' required>
+                <option value="">Select Blood Bank</option>
+                {% for dt in mydata %}
+                    <option value="{{ dt.bloodbankid }}">{{ dt.bbname }}</option>
+                {% endfor %}              
+            </select>
+          </div>                
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="complaints"><button type="button" class="btn btn-danger">Back</button></a>
+    </form>
+</div>  
+</div>              
+{% endblock body %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="heading">List of Users</h1>
+<div style="padding:5px;">
+    <form class="row g-3" method="post" style="float: right; padding-right: 15px;">
+        {% csrf_token %}        
+        <div class="col-auto">
+            <select class="form-select" name='usertype' required>
+                <option value="">Select User Type</option>     
+                    <option {% if usertype == "admin" %} selected {% endif %} value="admin">Admin</option>
+                    <option {% if usertype == "bloodbank" %} selected {% endif %} value="bloodbank">Blood Bank</option>
+                    <option {% if usertype == "donor" %} selected {% endif %} value="donor">Donor</option>
+                    <option {% if usertype == "receiver" %} selected {% endif %} value="receiver">Receiver</option>                          
+            </select>
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-success mb-3">Search</button>
+        </div>
+        
+      </form>
+      <div class="col-auto">
+        <a href="register"><button type="button" class="btn btn-primary mb-3">Add New User</button></a>
+      </div>
+<table border="4" class="table table-info table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Fullname</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>User Type</th>
+            <th>Created By</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dt in mydata %}
+        <tr>
+            <td>{{ forloop.counter0|add:mydata.start_index}}</td>
+            <td>{{ dt.firstname}}&nbsp;{{ dt.lastname }}</td>
+            <td>{{ dt.username }}</td>
+            <td>{{ dt.password }}</td>
+            <td>{{ dt.usertype }}</td>
+            <td>{{ dt.created_by }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% if mydata %}
+<nav>
+    <ul class="pagination pagination-lg">
+        {% for i in mydata.paginator.page_range %}
+        {% if mydata.number == i %}
+          <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+</div>
+{% endblock body %}
