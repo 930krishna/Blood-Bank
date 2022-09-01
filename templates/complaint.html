@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="heading">List of Complaints</h1>
+<div style="padding:5px;">
+    <form class="row g-3" method="post" style="float: right; padding-right: 15px;">
+        {% csrf_token %}        
+        <div class="col-auto">
+          <input type="Number" class="form-control" name="comp_no" value="{{ comp_no }}" placeholder="Enter Complaint Number">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-success mb-3">Search</button>
+        </div>
+      </form>
+<table border="4" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Complaint Number</th>
+            <th>Complaint Name</th>
+            <th>Contact</th>
+            <th>Message</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if mydata %}
+        {% for dt in mydata %}
+        <tr>
+            <td>{{ forloop.counter0|add:mydata.start_index}}</td>
+            <td>{{ dt.comp_no }}</td>
+            <td>{{ dt.comp_name }}</td>
+            <td>{{ dt.comp_phone }}</td>
+            <td>{{ dt.comp_msg }}</td>
+            <td>{{ dt.status }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+          <td colspan="6" style="color:red; text-align:center;">No record found!</td>           
+        </tr>
+      {% endif %} 
+    </tbody>
+</table>
+{% if mydata %}
+<nav>
+    <ul class="pagination pagination-lg">
+        {% for i in mydata.paginator.page_range %}
+        {% if mydata.number == i %}
+          <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+</div>
+{% endblock body %}

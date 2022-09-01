@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'restapi',
 ]
 
 MIDDLEWARE = [
@@ -86,7 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mybank',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'USER': 'root',
         'PASSWORD':'',
         'PORT':'3306'

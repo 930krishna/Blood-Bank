@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
 {% block body %}
-<h1 class="heading">List of Bloodbanks</h1><hr>
+<h1 class="heading">List of Bloodbanks</h1>
+<div style="padding:5px;">
+    <form class="row g-3" method="post" style="float: right; padding-right: 15px;">
+        {% csrf_token %}        
+        <div class="col-auto">
+          <input type="text" class="form-control" name="city" value="{{ city }}" placeholder="Enter City">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-success mb-3">Search</button>
+        </div>
+      </form>
 <table border="4" class="table table-info table-striped table-bordered table-hover">
     <thead>
         <tr>
+            <th>#</th>
             <th>Bank Name</th>
             <th>Address</th>
             <th>Email ID</th>
@@ -16,15 +27,30 @@
     <tbody>
         {% for dt in mydata %}
         <tr>
+            <td>{{ forloop.counter0|add:mydata.start_index}}</td>
             <td>{{ dt.bbname }}</td>
             <td>{{ dt.address}}&nbsp;{{dt.city }}</td>
             <td>{{ dt.email }}</td>
             <td>{{ dt.contact }}</td>
             <td>{{ dt.contactPerson }}</td>
             <td><a href="{% url 'updBank' id=dt.bloodbankid %}"><button class="btn btn-warning">Update</button></a></td>
-            <td><a href="{% url 'delBank' id=dt.bloodbankid %}"><button class="btn btn-danger">Delete</button></a></td>
+            <td><a href="{% url 'delBank' id=dt.bloodbankid %}" onclick="return confirm('Are you sure you want to delete {{ dt.bbname }} ?')"><button class="btn btn-danger">Delete</button></a></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% if mydata %}
+<nav>
+    <ul class="pagination pagination-lg">
+        {% for i in mydata.paginator.page_range %}
+        {% if mydata.number == i %}
+          <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+</div>
 {% endblock body %}
